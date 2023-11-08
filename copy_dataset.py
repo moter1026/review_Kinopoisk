@@ -1,5 +1,7 @@
 import os
 import shutil
+import description
+
 
 def delete_files_and_dir(dir):
     all_files = os.listdir(dir)
@@ -43,3 +45,10 @@ for file in enumerate(all_bad_files):
 
 delete_files_and_dir('./dataset/good/copy')
 delete_files_and_dir("./dataset/bad/copy")
+
+
+
+name = "description_two"
+name_dir = "./new data"
+
+description.make_description(name, name_dir)

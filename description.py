@@ -1,11 +1,11 @@
 import os
 import csv
 
-print("Ввведите название .csv файла")
-name = str(input())
+# print("Ввведите название .csv файла")
+# name = str(input())
 
-print("Ввведите путь до нужной папки")
-name_dir = str(input())
+# print("Ввведите путь до нужной папки")
+# name_dir = str(input())
 
 
 class Description:
@@ -39,10 +39,12 @@ def about(dir):
 
 
 
+def make_description(name, name_dir):
+    with open(name+".csv", mode="w+", encoding='utf-8') as textFile:
+        file_writer = csv.writer(textFile, delimiter = ",");
+        file_writer.writerow(["абсолютный путь к файлу", "относительный путь", "метка класса"])
+        all_descriptions = about(name_dir)
+        for description in enumerate(all_descriptions):
+            file_writer.writerow([description[1].full_path, description[1].path, description[1].type_class])
 
-with open(name+".csv", "w+") as textFile:
-    file_writer = csv.writer(textFile, delimiter = ",");
-    file_writer.writerow(["абсолютный путь к файлу", "относительный путь", "метка класса"])
-    all_descriptions = about(name_dir)
-    for description in enumerate(all_descriptions):
-        file_writer.writerow([description[1].full_path, description[1].path, description[1].type_class])
+# make_description(name, name_dir)
