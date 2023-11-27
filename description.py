@@ -1,12 +1,6 @@
 import os
 import csv
 
-# print("Ввведите название .csv файла")
-# name = str(input())
-
-# print("Ввведите путь до нужной папки")
-# name_dir = str(input())
-
 
 class Description:
     full_path = 0 #полный путь
@@ -46,5 +40,3 @@ def make_description(name, name_dir):
         all_descriptions = about(name_dir)
         for description in enumerate(all_descriptions):
             file_writer.writerow([description[1].full_path, description[1].path, description[1].type_class])
-
-# make_description(name, name_dir)
