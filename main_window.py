@@ -61,8 +61,11 @@ class MainWindow(QMainWindow):
         self.button.setCheckable(True)
         if(self.comboBox.currentText() == "good"):
             self.button.clicked.connect(self.nextGoodReview)
+            self.button2.clicked.connect(self.prevGoodReview)
         else:
             self.button.clicked.connect(self.nextBadReview)
+            self.button2.clicked.connect(self.prevBadReview)
+            
         widget = QWidget()
         widget.setLayout(hlayout)
         self.setCentralWidget(widget)
@@ -73,7 +76,6 @@ class MainWindow(QMainWindow):
         try_encodings = ["utf-8", "utf-8-sig", "cp1251", "latin-1"]
 
         for encoding in try_encodings:
-            # print(encoding)
             try:
                 with open(path_of_review, "r", encoding=encoding) as readFile:
                     text_of_review = readFile.read()
@@ -82,7 +84,6 @@ class MainWindow(QMainWindow):
                 continue  # Переходим к следующей кодировке, если декодирование не удалось
         self.textLabel.setText("good\n" + text_of_review)
         self.textLabel.adjustSize()
-
     
     def nextBadReview(self):
         path_of_review = self.badReview.__next__()
@@ -90,7 +91,6 @@ class MainWindow(QMainWindow):
         try_encodings = ["utf-8", "utf-8-sig", "cp1251", "latin-1"]
 
         for encoding in try_encodings:
-            # print(encoding)
             try:
                 with open(path_of_review, "r", encoding=encoding) as readFile:
                     text_of_review = readFile.read()
@@ -101,12 +101,50 @@ class MainWindow(QMainWindow):
         self.textLabel.adjustSize()
 
 
+    def prevGoodReview(self):
+        path_of_review = self.goodReview.elem[-2]
+        # print(path_of_review)
+        text_of_review = ""
+        try_encodings = ["utf-8", "utf-8-sig", "cp1251", "latin-1"]
+
+        for encoding in try_encodings:
+            try:
+                with open(path_of_review, "r", encoding=encoding) as readFile:
+                    text_of_review = readFile.read()
+                    self.goodReview.elem.remove(self.goodReview.elem[-1])
+                    self.goodReview.counter -= 1
+                break  # Прерываем цикл, если декодирование успешно
+            except UnicodeDecodeError:
+                continue  # Переходим к следующей кодировке, если декодирование не удалось
+        self.textLabel.setText("good\n" + text_of_review)
+        self.textLabel.adjustSize()
+    
+    def prevBadReview(self):
+        path_of_review = self.badReview.elem[-2]
+        text_of_review = ""
+        try_encodings = ["utf-8", "utf-8-sig", "cp1251", "latin-1"]
+
+        for encoding in try_encodings:
+            try:
+                with open(path_of_review, "r", encoding=encoding) as readFile:
+                    text_of_review = readFile.read()
+                    self.badReview.elem.remove(self.badReview.elem[-1])
+                    self.badReview.counter -= 1
+                break  # Прерываем цикл, если декодирование успешно
+            except UnicodeDecodeError:
+                continue  # Переходим к следующей кодировке, если декодирование не удалось
+        self.textLabel.setText("bad\n" + text_of_review)
+        self.textLabel.adjustSize()
+
     def indexChanged(self, string: str):
         self.button.clicked.disconnect()
+        self.button2.clicked.disconnect()
         if(self.comboBox.currentText() == "good"):
             self.button.clicked.connect(self.nextGoodReview)
+            self.button2.clicked.connect(self.prevGoodReview)
         else:
             self.button.clicked.connect(self.nextBadReview)
+            self.button2.clicked.connect(self.prevBadReview)
         self.textLabel.adjustSize()
         
 
